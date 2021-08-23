@@ -1,6 +1,0 @@
-matplotlib.pyplot
-pandas
-numpy
-keras
-sklearn
-yfinance
