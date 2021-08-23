@@ -1,0 +1,10 @@
+StockData:
+  ticker: F
+  range: Max
+
+UserInput:
+  buy_threshold: 0.1
+  sell_threshold: -0.1
+  gain_window: 60
+
+  test_size: 200

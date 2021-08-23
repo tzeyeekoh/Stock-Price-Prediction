@@ -7,16 +7,19 @@ class Preprocess:
     '''Get stock data and preprocess
     '''
 
-    def __init__(self):
-        pass
+    def __init__(self, conf):
+        self.stk_range = conf['StockData']['range']
+        self.buy_sell_thres = [conf['UserInput']['sell_threshold'], conf['UserInput']['buy_threshold']]
+        self.gain_window = conf['UserInput']['gain_window']
+        self.test_size = conf['UserInput']['test_size']
 
     def pipeline(self, ticker):
         '''Pipeline for preprocessing data
         '''
-        df_data = self._query_data(ticker, period_range="Max")
-        df_features = self._generate_features(df_data, buy_sell_threshold =[-0.1,0.1], gain_window = 60)
+        df_data = self._query_data(ticker, period_range=self.stk_range)
+        df_features = self._generate_features(df_data, buy_sell_threshold =self.buy_sell_thres, gain_window = self.gain_window)
         df_scaled = self._scale_data(df_features)
-        X_train, y_train, X_test, y_test = self._part_data_train_test(df_scaled, test_size = 200)
+        X_train, y_train, X_test, y_test = self._part_data_train_test(df_scaled, test_size = self.test_size)
         
         return X_train, X_test, y_train, y_test
 
@@ -30,7 +33,7 @@ class Preprocess:
         return df_data
 
 
-    def _generate_features(self, df_data, buy_sell_threshold =[-0.1,0.1], gain_window = 60):
+    def _generate_features(self, df_data, buy_sell_threshold, gain_window):
         '''Generate features of interest
         '''
         df_data['Week'] = df_data.index.isocalendar().week
@@ -83,7 +86,7 @@ class Preprocess:
 
         return df_data_scaled
     
-    def _part_data_train_test(self, df_data_scaled, test_size = 200):
+    def _part_data_train_test(self, df_data_scaled, test_size):
         '''Partition dataset into train and test sets
         '''
         df_X_input = df_data_scaled.drop(columns=['Short_Gain', 'Long_Gain','Rating'])
