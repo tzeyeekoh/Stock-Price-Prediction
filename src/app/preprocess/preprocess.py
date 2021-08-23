@@ -57,7 +57,7 @@ class Preprocess:
         df_data['Short_Gain'] = df_data.Close.pct_change(10).shift(-10)
         df_data['Short_Gain'] = df_data['Short_Gain'].fillna(df_data['Short_Gain'].mean())
 
-        # % change in long-term
+        # % Change in long-term
         df_data['Long_Gain'] = df_data.Close.pct_change(gain_window).shift(-gain_window)
         df_data['Long_Gain'] = df_data['Long_Gain'].fillna(df_data['Long_Gain'].mean())
 
