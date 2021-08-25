@@ -77,8 +77,11 @@ ticker_selector = html.Div(
             className="mr-1", 
             color='primary'),
         html.Hr(),
+        dcc.Loading(className='loadscreen', type='circle', fullscreen=True,
+            children=[
+                html.Div(id="data-output", style={"verticalAlign": "middle"})
+            ]),
 
-        html.Div(id="data-output", style={"verticalAlign": "middle"}),
     ])
 
 layout = html.Div([
@@ -113,7 +116,7 @@ def get_stock_data(n, ticker, period, sell_thresh, buy_thresh, gain_w):
     fig = px.scatter(data_frame=stk_data.reset_index(), x="Date", y="Close", color="Rating")
     
     stk_insights = [
-        html.H5('Company: '+ yf.Ticker(ticker).info['longName']+' | Buy/Sell Window: '+period),
+        html.H5('Company: '+ yf.Ticker(ticker).info['longName']+' | Period: '+period),
         html.Label("Sample data:"),
         dash_table.DataTable(
                 data=stk_data.reset_index().sample(5).to_dict('records'),

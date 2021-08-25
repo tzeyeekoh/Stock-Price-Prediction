@@ -2,3 +2,7 @@
     margin: auto;
     width: 75%;
 }
+
+.loadscreen {
+    opacity: 0.3;
+}
