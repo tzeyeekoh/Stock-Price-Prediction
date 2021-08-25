@@ -19,7 +19,7 @@ class Preprocess:
         df_data = self._query_data(ticker, period_range=self.stk_range)
         df_features = self._generate_features(df_data, buy_sell_threshold =self.buy_sell_thres, gain_window = self.gain_window)
         df_scaled = self._scale_data(df_features)
-        X_train, y_train, X_test, y_test = self._part_data_train_test(df_scaled, test_size = self.test_size)
+        X_train, X_test, y_train, y_test = self._part_data_train_test(df_scaled, test_size = self.test_size)
         
         return X_train, X_test, y_train, y_test
 
@@ -79,10 +79,6 @@ class Preprocess:
         indicator_cols =['Volume', 'Week', 'Day', 'PrevDayChng', 'MACD', 'Signal', 'EMA5', 'EMA12', 'EMA26', 'Var']
         indicator_scaler = MinMaxScaler()
         df_data_scaled[indicator_cols] = indicator_scaler.fit_transform(df_data_scaled[indicator_cols])
-
-        gain_cols = ['Short_Gain', 'Long_Gain']
-        gain_scaler = MinMaxScaler()
-        df_data_scaled[gain_cols] = gain_scaler.fit_transform(df_data_scaled[gain_cols])
 
         return df_data_scaled
     

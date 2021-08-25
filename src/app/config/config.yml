@@ -7,4 +7,4 @@ UserInput:
   sell_threshold: -0.1
   gain_window: 60
 
-  test_size: 200
+  test_size: 60
