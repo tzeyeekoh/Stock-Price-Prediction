@@ -1,2 +1,3 @@
 # Stock-Price-Prediction
-Deep-learning models for stock price prediction
+Web-app for stock price prediction, utilizing neural network model
+![Homepage](docs/StockPriceInsights.jpg)
