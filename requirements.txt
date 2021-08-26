@@ -1,102 +1,20 @@
-absl-py==0.13.0
-astunparse==1.6.3
-backcall @ file:///home/ktietz/src/ci/backcall_1611930011877/work
-Brotli==1.0.9
-cachetools==4.2.2
-certifi==2021.5.30
-charset-normalizer==2.0.4
-clang==5.0
-click==8.0.1
-colorama @ file:///tmp/build/80754af9/colorama_1607707115595/work
-cycler==0.10.0
 dash==1.21.0
 dash-bootstrap-components==0.13.0
 dash-core-components==1.17.1
 dash-html-components==1.1.4
 dash-table==4.12.0
-decorator @ file:///tmp/build/80754af9/decorator_1621259047763/work
-et-xmlfile==1.1.0
 Flask==2.0.1
 Flask-Compress==1.10.1
-flatbuffers==1.12
-fonttools==4.25.0
-future==0.18.2
-gast==0.4.0
-google-auth==1.34.0
-google-auth-oauthlib==0.4.5
-google-pasta==0.2.0
-grpcio==1.39.0
 h5py==3.1.0
-idna==3.2
-imbalanced-learn==0.8.0
-imblearn==0.0
-ipykernel @ file:///C:/ci/ipykernel_1607454116140/work/dist/ipykernel-5.3.4-py3-none-any.whl
-ipython @ file:///C:/ci/ipython_1628244015142/work
-ipython-genutils @ file:///tmp/build/80754af9/ipython_genutils_1606773439826/work
-itsdangerous==2.0.1
-jedi @ file:///C:/ci/jedi_1611341083684/work
-Jinja2==3.0.1
 joblib==1.0.1
-jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1616770841739/work
-jupyter-core @ file:///C:/ci/jupyter_core_1612213515523/work
 keras==2.6.0
-Keras-Preprocessing==1.1.2
-kiwisolver @ file:///C:/ci/kiwisolver_1612282555033/work
-lxml==4.6.3
-Markdown==3.3.4
-MarkupSafe==2.0.1
-matplotlib @ file:///C:/ci/matplotlib-suite_1628011511716/work
-matplotlib-inline @ file:///tmp/build/80754af9/matplotlib-inline_1628242447089/work
-mkl-fft==1.3.0
-mkl-random @ file:///C:/ci/mkl_random_1626186184308/work
-mkl-service==2.4.0
-mlxtend==0.18.0
-multitasking==0.0.9
-munkres==1.1.4
 numpy==1.19.5
-oauthlib==3.1.1
-olefile==0.46
-openpyxl==3.0.7
-opt-einsum==3.3.0
 pandas==1.3.1
-parso @ file:///tmp/build/80754af9/parso_1617223946239/work
-pickleshare @ file:///tmp/build/80754af9/pickleshare_1606932040724/work
-Pillow @ file:///C:/ci/pillow_1625663294916/work
 plotly==5.2.1
-prompt-toolkit @ file:///tmp/build/80754af9/prompt-toolkit_1616415428029/work
-protobuf==3.17.3
-pyasn1==0.4.8
-pyasn1-modules==0.2.8
-Pygments @ file:///tmp/build/80754af9/pygments_1621606182707/work
-pyparsing @ file:///home/linux1/recipes/ci/pyparsing_1610983426697/work
-python-dateutil @ file:///tmp/build/80754af9/python-dateutil_1626374649649/work
-pytz==2021.1
-pywin32==228
 PyYAML==5.4.1
-pyzmq==20.0.0
-requests==2.26.0
-requests-oauthlib==1.3.0
-rsa==4.7.2
 scikit-learn==0.24.2
 scipy==1.7.1
-seaborn==0.11.1
-sip==4.19.13
-six==1.15.0
 sklearn==0.0
-tenacity==8.0.1
-tensorboard==2.6.0
-tensorboard-data-server==0.6.1
-tensorboard-plugin-wit==1.8.0
 tensorflow==2.6.0
 tensorflow-estimator==2.6.0
-termcolor==1.1.0
-threadpoolctl==2.2.0
-tornado @ file:///C:/ci/tornado_1606924294691/work
-traitlets @ file:///home/ktietz/src/ci/traitlets_1611929699868/work
-typing-extensions==3.7.4.3
-urllib3==1.26.6
-wcwidth @ file:///tmp/build/80754af9/wcwidth_1593447189090/work
-Werkzeug==2.0.1
-wincertstore==0.2
-wrapt==1.12.1
 yfinance==0.1.63

@@ -10,18 +10,20 @@ import yfinance as yf
 
 from .app import app
 from .preprocess.preprocess import Preprocess
-from .config.load_conf import read_config
+from .config.load_conf import read_config, save_config
+
+conf = read_config()
 
 ## Navigation bar
 navbar = dbc.NavbarSimple(
     [
-        dbc.NavItem(dbc.NavLink("Prediction", href="/predict")),
+        dbc.NavItem(dbc.NavLink("Pick Stock", href="/index")),
+        dbc.NavItem(dbc.NavLink("Predict Regression", href="/reg", id='nav-pred-reg')),
         dbc.NavItem(dbc.NavLink("Train Model", href="/request")),
-        
     ],
     brand="Stock Prediction",
     brand_href="/index",
-    color="primary",
+    color="dark",
     dark=True,
 )
 
@@ -34,7 +36,7 @@ ticker_selector = html.Div(
             dbc.Col([
                 html.Label('Select Ticker'),
                 html.Br(),
-                dcc.Input(id='ticker-entry', placeholder='Select Ticker')
+                dcc.Input(id='ticker-entry', placeholder='Select Ticker', required=True)
             ], width=2),
             dbc.Col([
                 html.Label('Period'),
@@ -46,7 +48,7 @@ ticker_selector = html.Div(
                         {'label':'1-year', 'value':'1y'}, 
                         {'label':'Year-to-date', 'value':'YTD'}, 
                         {'label':'6-months', 'value':'6m'}],
-                    value='Max',
+                    value=conf['StockData']['range'],
                     clearable= False)
             ], width=2),]),
         html.Br(),
@@ -54,19 +56,19 @@ ticker_selector = html.Div(
             dbc.Col([
                 html.Label('Sell Threshold'),
                 html.Br(),
-                dcc.Input(id='sell-thresh-entry', type="number", value=10, min=1, max=999, step=1),
+                dcc.Input(id='sell-thresh-entry', type="number", value=(conf['UserInput']["sell_threshold"]*-100), min=1, max=999, step=1),
                 html.Label('% Loss to sell')
             ], width=2),
             dbc.Col([
                 html.Label('Buy Threshold'),
                 html.Br(),
-                dcc.Input(id='buy-threshold-entry', type="number", value=10, min=1, max=999, step=1),
+                dcc.Input(id='buy-threshold-entry', type="number", value=(conf['UserInput']["buy_threshold"]*100), min=1, max=999, step=1),
                 html.Label('% Gain to buy')
             ], width=2),
             dbc.Col([
                 html.Label('Window'),
                 html.Br(),
-                dcc.Input(id='gain-window-entry', type="number", value=60, min=1, max=999, step=1),
+                dcc.Input(id='gain-window-entry', type="number", value=conf['UserInput']["gain_window"], min=1, max=999, step=1),
                 html.Label(' days')
             ], width=2),
         ]),
@@ -77,7 +79,7 @@ ticker_selector = html.Div(
             className="mr-1", 
             color='primary'),
         html.Hr(),
-        dcc.Loading(className='loadscreen', type='circle', fullscreen=True,
+        dcc.Loading(className='loadscreen', type='default', fullscreen=True,
             children=[
                 html.Div(id="data-output", style={"verticalAlign": "middle"})
             ]),
@@ -105,11 +107,18 @@ layout = html.Div([
 def get_stock_data(n, ticker, period, sell_thresh, buy_thresh, gain_w):
 
     conf = read_config()
+    conf['UserInput']["sell_threshold"] = sell_thresh/-100
+    conf['UserInput']["buy_threshold"] = buy_thresh/100
+    conf['UserInput']["gain_window"] = gain_w
+    conf['UserInput']["test_size"] = gain_w
+    conf['StockData']["ticker"] = ticker
+    conf['StockData']["range"] = period
+    save_config(conf)
+
     prep = Preprocess(conf)
-    print('Test click')
     print(ticker, period)
 
-    buysell_thres = [-sell_thresh/100, buy_thresh/100]
+    buysell_thres = [sell_thresh/-100, buy_thresh/100]
     stk_data = prep._query_data(ticker, period_range=period)
     stk_data = prep._generate_features(stk_data, buysell_thres, gain_window=gain_w)
 
@@ -119,7 +128,7 @@ def get_stock_data(n, ticker, period, sell_thresh, buy_thresh, gain_w):
         html.H5('Company: '+ yf.Ticker(ticker).info['longName']+' | Period: '+period),
         html.Label("Sample data:"),
         dash_table.DataTable(
-                data=stk_data.reset_index().sample(5).to_dict('records'),
+                data=stk_data.reset_index().head().to_dict('records'),
                 columns=[{'name': i, 'id': i} for i in stk_data.reset_index().columns],
                 style_table={'overflowX': 'scroll'}),
         dcc.Graph(figure=fig)

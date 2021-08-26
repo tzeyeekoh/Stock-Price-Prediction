@@ -4,16 +4,12 @@ from dash.dependencies import Input, Output
 
 from src.app.app import app
 from src.app import main_page
-# from src.app import request_page
-# from src.app import account_page
-# from src.app import predict_page
+from src.app import reg_page
 
 server = app.server
 app.title = 'Stock Prediction'
 app.layout = html.Div([
     dcc.Location(id='url', refresh=True),
-    dcc.Store(id='file-update', data={}),
-    dcc.Store(id='model-update', data={}),
     html.Div(id='page-content')
 ])
 
@@ -24,8 +20,8 @@ def display_page(pathname):
     '''Display for different pages
     '''
     print(pathname)
-    # if pathname == '/predict':
-    #     return predict_page.layout
+    if pathname == '/reg':
+        return reg_page.layout
     # if pathname == '/request':
     #     return request_page.layout
     return main_page.layout
