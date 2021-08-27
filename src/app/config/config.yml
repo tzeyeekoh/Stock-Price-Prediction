@@ -1,6 +1,11 @@
+ModelParams:
+  batchsize: 256
+  earlystop: 5
+  epochs: 100
+  val_split: 0.1
 StockData:
   range: 5y
-  ticker: D
+  ticker: SPY
 UserInput:
   buy_threshold: 0.1
   gain_window: 60

@@ -6,10 +6,14 @@ import numpy as np
 
 class NeuralNet_Reg:
 
-    def __init__(self):
+    def __init__(self, conf):
         '''Initialize Reg NN, set seeds for reproducible results'''
         np.random.seed(1)
         tf.random.set_seed(1)
+        self.earlystop = conf['ModelParams']['earlystop']
+        self.epochs = conf['ModelParams']['epochs']
+        self.batchsize = conf['ModelParams']['batchsize']
+        self.val_split = conf['ModelParams']['val_split']
 
     def predict_nextday(self, model, X_test):
         '''Predict future gain based on gain window. Get prediction from latest day'''
@@ -21,8 +25,8 @@ class NeuralNet_Reg:
 
     def train_NN(self, model, X_train, y_train):
         '''Train NN Regression'''
-        callback = EarlyStopping(monitor='mae', patience=5, restore_best_weights=True, verbose=1)
-        model.fit(X_train, y_train, epochs=100, batch_size=256, callbacks=[callback])
+        callback = EarlyStopping(monitor='val_mae', patience=self.earlystop, restore_best_weights=True, verbose=1)
+        model.fit(X_train, y_train, epochs=self.epochs, batch_size=self.batchsize, callbacks=[callback], validation_split=self.val_split)
 
         return model
 
@@ -33,7 +37,7 @@ class NeuralNet_Reg:
         model.add(Dense(50, activation='relu'))
         model.add(Dense(30, activation='relu'))
         model.add(Dense(10, activation='relu'))
-        model.add(Dense(2, activation='relu'))
+        model.add(Dense(2, activation='sigmoid'))
         model.add(Dense(1))
 
         model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae'])

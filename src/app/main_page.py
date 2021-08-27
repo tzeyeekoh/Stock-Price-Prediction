@@ -1,4 +1,3 @@
-from dash_bootstrap_components._components.Label import Label
 import pandas as pd
 import dash_html_components as html
 import dash_core_components as dcc
