@@ -22,8 +22,6 @@ def display_page(pathname):
     print(pathname)
     if pathname == '/reg':
         return reg_page.layout
-    # if pathname == '/request':
-    #     return request_page.layout
     return main_page.layout
 
 

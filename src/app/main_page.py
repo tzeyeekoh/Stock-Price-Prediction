@@ -18,7 +18,6 @@ navbar = dbc.NavbarSimple(
     [
         dbc.NavItem(dbc.NavLink("Pick Stock", href="/index")),
         dbc.NavItem(dbc.NavLink("Predict Regression", href="/reg", id='nav-pred-reg')),
-        dbc.NavItem(dbc.NavLink("Train Model", href="/request")),
     ],
     brand="Stock Prediction",
     brand_href="/index",
@@ -122,15 +121,21 @@ def get_stock_data(n, ticker, period, sell_thresh, buy_thresh, gain_w):
     stk_data = prep._generate_features(stk_data, buysell_thres, gain_window=gain_w)
 
     fig = px.scatter(data_frame=stk_data.reset_index(), x="Date", y="Close", color="Rating")
-    
-    stk_insights = [
-        html.H5('Company: '+ yf.Ticker(ticker).info['longName']+' | Period: '+period),
-        html.Label("Sample data:"),
-        dash_table.DataTable(
-                data=stk_data.reset_index().head().to_dict('records'),
-                columns=[{'name': i, 'id': i} for i in stk_data.reset_index().columns],
-                style_table={'overflowX': 'scroll'}),
-        dcc.Graph(figure=fig)
-    ]
+    try:
+        stk_insights = [
+            html.H5('Company: '+ yf.Ticker(ticker).info['longName']+' | Period: '+period),
+            html.Label("Sample data:"),
+            dash_table.DataTable(
+                    data=stk_data.reset_index().head().to_dict('records'),
+                    columns=[{'name': i, 'id': i} for i in stk_data.reset_index().columns],
+                    style_table={'overflowX': 'scroll'}),
+            dcc.Graph(figure=fig)
+        ]
 
-    return stk_insights
+        return stk_insights
+    except Exception:
+        err_statement = [
+            html.H3("Error Displaying Data"),
+            html.H5("Try Predict Regression Page")
+        ]
+        return err_statement
