@@ -8,7 +8,7 @@ RFParams:
   n_est: 100
 StockData:
   range: 5y
-  ticker: SPY
+  ticker: F
 UserInput:
   buy_threshold: 0.1
   gain_window: 60
