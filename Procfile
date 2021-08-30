@@ -1,1 +1,1 @@
-web: gunicorn index:server
+web: sh -c 'cd src/' gunicorn index:server
