@@ -1,1 +1,1 @@
-web: sh -c 'cd src/' gunicorn index:server
+web: gunicorn --pythonpath src index:server
