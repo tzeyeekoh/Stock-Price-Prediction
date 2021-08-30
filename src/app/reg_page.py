@@ -1,5 +1,3 @@
-from dash_bootstrap_components._components.Alert import Alert
-from matplotlib.pyplot import title
 import pandas as pd
 import dash_html_components as html
 import dash_core_components as dcc
