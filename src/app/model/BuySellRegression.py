@@ -8,13 +8,7 @@ class NeuralNet_Reg:
 
     def __init__(self, conf):
         '''Initialize Reg NN, set seeds for reproducible results'''
-        np.random.seed(1)
-        tf.random.set_seed(1)
-        self.earlystop = conf['ModelParams']['earlystop']
-        self.epochs = conf['ModelParams']['epochs']
-        self.batchsize = conf['ModelParams']['batchsize']
-        self.val_split = conf['ModelParams']['val_split']
-
+        
     def predict_nextday(self, model, X_test):
         '''Predict future gain based on gain window. Get prediction from latest day'''
         pred_gain = model.predict(X_test)

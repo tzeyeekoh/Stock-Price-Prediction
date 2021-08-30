@@ -3,6 +3,9 @@ ModelParams:
   earlystop: 5
   epochs: 100
   val_split: 0.1
+RFParams:
+  max_depth: 20
+  n_est: 100
 StockData:
   range: 5y
   ticker: NVDA

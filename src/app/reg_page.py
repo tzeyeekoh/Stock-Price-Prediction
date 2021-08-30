@@ -9,6 +9,7 @@ from .app import app
 from .main_page import navbar
 from .preprocess.preprocess import Preprocess
 from .model.BuySellRegression import NeuralNet_Reg
+from .model.BuySellRForest import RandFor_Reg
 from .config.load_conf import read_config
 
 stock_details = html.Div(id='update-stock-details', className='content-container', 
@@ -56,24 +57,31 @@ def update_stk_details(n):
 def make_prediction_reg(n):
     conf = read_config()
     prep = Preprocess(conf)
-    NN = NeuralNet_Reg(conf)
+    rf = RandFor_Reg(conf)
 
     ticker = conf['StockData']['ticker']
     X_train, X_test, y_train, y_test = prep.pipeline(ticker)
-    model = NN.reg_NN(X_train)
-    model = NN.train_NN(model, X_train, y_train)
+    model = rf.rf_model()
+    model = rf.train_rf(model, X_train, y_train)
 
     pred_y_train = model.predict(X_train)
-    print(y_train, pred_y_train[:,0])
-    df_val = pd.DataFrame({'Prediction':(pred_y_train[:,0])*100, 'Actual': (y_train)*100})
-    fig = px.line(df_val, x=df_val.index, y='Actual')
+    print(y_train, pred_y_train)
+    df_val = pd.DataFrame({'Prediction':(pred_y_train)*100, 'Actual': (y_train)*100})
+    fig = px.line(df_val, x=df_val.index, y='Actual', title= "Training Prediction")
     fig.add_scatter(x=df_val.index, y=df_val['Prediction'], name="Prediction")
 
-    future_gain = NN.predict_nextday(model, X_test)
+    future_gain = rf.predict_nextday(model, X_test)
+    if future_gain >= conf['UserInput']['buy_threshold']:
+        rec = "Buy"
+    elif future_gain <= conf['UserInput']['sell_threshold']:
+        rec = "Sell"
+    else:
+        rec = "Hold"
 
     pred_output = [
-        html.H5("Predicted gain: "+ str(future_gain*100)+"%"),
-        html.Label("Training Prediction"),
+        html.H5("Predicted Movement: "+ str(future_gain*100)+"% in "+str(conf['UserInput']['gain_window']) + " days"),
+        html.H5("Recommendation: "+rec),
+        html.Br(),
         dcc.Graph(figure=fig)
     ]    
 
