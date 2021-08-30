@@ -1,6 +1,4 @@
 from sklearn.ensemble import RandomForestRegressor
-import tensorflow as tf
-import numpy as np
 
 class RandFor_Reg:
 
