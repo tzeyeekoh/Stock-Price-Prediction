@@ -37,7 +37,7 @@ class NeuralNet_Reg:
         model.add(Dense(50, activation='relu'))
         model.add(Dense(30, activation='relu'))
         model.add(Dense(10, activation='relu'))
-        model.add(Dense(2, activation='sigmoid'))
+        model.add(Dense(2, activation='relu'))
         model.add(Dense(1))
 
         model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mae'])

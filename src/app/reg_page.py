@@ -65,11 +65,16 @@ def make_prediction_reg(n):
 
     pred_y_train = model.predict(X_train)
     print(y_train, pred_y_train[:,0])
+    df_val = pd.DataFrame({'Prediction':(pred_y_train[:,0])*100, 'Actual': (y_train)*100})
+    fig = px.line(df_val, x=df_val.index, y='Actual')
+    fig.add_scatter(x=df_val.index, y=df_val['Prediction'], name="Prediction")
 
     future_gain = NN.predict_nextday(model, X_test)
 
     pred_output = [
-        html.H5("Predicted gain: "+ str(future_gain*100)+"%")
+        html.H5("Predicted gain: "+ str(future_gain*100)+"%"),
+        html.Label("Training Prediction"),
+        dcc.Graph(figure=fig)
     ]    
 
     return pred_output
