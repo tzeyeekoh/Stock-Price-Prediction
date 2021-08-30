@@ -1,14 +1,17 @@
+from dash_bootstrap_components._components.Alert import Alert
+from matplotlib.pyplot import title
 import pandas as pd
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
+import numpy as np
 import plotly.express as px
 
 from .app import app
 from .main_page import navbar
 from .preprocess.preprocess import Preprocess
-from .model.BuySellRegression import NeuralNet_Reg
+# from .model.BuySellRegression import NeuralNet_Reg
 from .model.BuySellRForest import RandFor_Reg
 from .config.load_conf import read_config
 
@@ -58,19 +61,21 @@ def make_prediction_reg(n):
     conf = read_config()
     prep = Preprocess(conf)
     rf = RandFor_Reg(conf)
-
+    #Init Model
     ticker = conf['StockData']['ticker']
     X_train, X_test, y_train, y_test = prep.pipeline(ticker)
     model = rf.rf_model()
     model = rf.train_rf(model, X_train, y_train)
-
-    pred_y_train = model.predict(X_train)
-    print(y_train, pred_y_train)
+    #Training Set
+    pred_y_train= model.predict(X_train)
     df_val = pd.DataFrame({'Prediction':(pred_y_train)*100, 'Actual': (y_train)*100})
     fig = px.line(df_val, x=df_val.index, y='Actual', title= "Training Prediction")
     fig.add_scatter(x=df_val.index, y=df_val['Prediction'], name="Prediction")
-
-    future_gain = rf.predict_nextday(model, X_test)
+    #Future movement
+    future_gain, pred_movement = rf.predict_nextday(model, X_test)
+    df_movement = pd.DataFrame({'Perc Change':pred_movement})
+    fig_pred_movement = px.line(df_movement, x=df_movement.index, y='Perc Change', title="Predicted Movement")
+    #Classify
     if future_gain >= conf['UserInput']['buy_threshold']:
         rec = "Buy"
     elif future_gain <= conf['UserInput']['sell_threshold']:
@@ -79,10 +84,11 @@ def make_prediction_reg(n):
         rec = "Hold"
 
     pred_output = [
+        dbc.Alert("Information provided on this website is general in nature and does not constitute financial advice.", color='danger'),
         html.H5("Predicted Movement: "+ str(future_gain*100)+"% in "+str(conf['UserInput']['gain_window']) + " days"),
         html.H5("Recommendation: "+rec),
-        html.Br(),
-        dcc.Graph(figure=fig)
+        dcc.Graph(figure=fig),
+        dcc.Graph(figure=fig_pred_movement),
     ]    
 
     return pred_output

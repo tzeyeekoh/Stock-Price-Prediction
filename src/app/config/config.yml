@@ -4,11 +4,11 @@ ModelParams:
   epochs: 100
   val_split: 0.1
 RFParams:
-  max_depth: 20
+  max_depth: 8
   n_est: 100
 StockData:
   range: 5y
-  ticker: NVDA
+  ticker: SPY
 UserInput:
   buy_threshold: 0.1
   gain_window: 60
