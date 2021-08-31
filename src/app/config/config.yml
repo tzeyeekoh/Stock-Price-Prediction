@@ -5,7 +5,7 @@ ModelParams:
   val_split: 0.1
 StockData:
   range: 5y
-  ticker: NVDA
+  ticker: SPY
 UserInput:
   buy_threshold: 0.1
   gain_window: 60
