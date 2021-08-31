@@ -3,14 +3,12 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
-import numpy as np
 import plotly.express as px
 
 from .app import app
 from .main_page import navbar
 from .preprocess.preprocess import Preprocess
-# from .model.BuySellRegression import NeuralNet_Reg
-from .model.BuySellRForest import RandFor_Reg
+from .model.BuySellXGBoost import RandFor_Reg
 from .config.load_conf import read_config
 
 stock_details = html.Div(id='update-stock-details', className='content-container', 
