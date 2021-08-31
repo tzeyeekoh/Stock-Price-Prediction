@@ -3,12 +3,14 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
+import numpy as np
 import plotly.express as px
 
 from .app import app
 from .main_page import navbar
 from .preprocess.preprocess import Preprocess
-from .model.BuySellXGBoost import XGB_Reg
+# from .model.BuySellRegression import NeuralNet_Reg
+from .model.BuySellRForest import RandFor_Reg
 from .config.load_conf import read_config
 
 stock_details = html.Div(id='update-stock-details', className='content-container', 
@@ -56,19 +58,19 @@ def update_stk_details(n):
 def make_prediction_reg(n):
     conf = read_config()
     prep = Preprocess(conf)
-    xgb = XGB_Reg(conf)
+    rf = RandFor_Reg(conf)
     #Init Model
     ticker = conf['StockData']['ticker']
     X_train, X_test, y_train, y_test = prep.pipeline(ticker)
-    model = xgb.xgb_model()
-    model = xgb.train_xgb(model, X_train, y_train)
+    model = rf.rf_model()
+    model = rf.train_rf(model, X_train, y_train)
     #Training Set
     pred_y_train= model.predict(X_train)
     df_val = pd.DataFrame({'Prediction':(pred_y_train)*100, 'Actual': (y_train)*100})
     fig = px.line(df_val, x=df_val.index, y='Actual', title= "Training Prediction")
     fig.add_scatter(x=df_val.index, y=df_val['Prediction'], name="Prediction")
     #Future movement
-    future_gain, pred_movement = xgb.predict_nextday(model, X_test)
+    future_gain, pred_movement = rf.predict_nextday(model, X_test)
     df_movement = pd.DataFrame({'Perc Change':pred_movement})
     fig_pred_movement = px.line(df_movement, x=df_movement.index, y='Perc Change', title="Predicted Movement")
     #Classify
