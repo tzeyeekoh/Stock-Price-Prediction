@@ -1,6 +1,6 @@
 import xgboost as xgb
 
-class RandFor_Reg:
+class XGB_Reg:
 
     def __init__(self, conf):
         '''Initialize Reg NN, set seeds for reproducible results'''
@@ -15,13 +15,13 @@ class RandFor_Reg:
         return latest_gain, pred_gain
 
 
-    def train_rf(self, model, X_train, y_train):
+    def train_xgb(self, model, X_train, y_train):
         '''Train NN Regression'''
         model.fit(X_train, y_train)
 
         return model
 
-    def rf_model(self):
+    def xgb_model(self):
         '''Random Forest Regression model
         Tune hyperparameters with google colab'''
         model = xgb.XGBRegressor(objective='reg:squarederror', 
